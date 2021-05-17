@@ -47,8 +47,14 @@ paths:
             type: "object"
             properties:
               message:
-                type: "string"
+                type: "object"
                 example: "User got successfully"
+              user:
+                example:
+                  - id: "1"
+                    name: "山田　太郎"
+                    created_at: "2021-05-16T09:38:11.000000Z"
+                    updated_at: "2021-05-16T09:38:11.000000Z"
         "404":
           description: "ユーザー情報がありません"
           schema:
@@ -70,7 +76,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "ユーザー名"
+        description: "ユーザー情報"
         required: true
         schema:
           type: "object"
