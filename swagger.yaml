@@ -108,7 +108,7 @@ paths:
       - in: "path"
         name: "user_id"
         type: "number"
-        description: "ユーザー番号"
+        description: "ユーザーID"
         required: true
       responses:
         "200":
@@ -142,7 +142,7 @@ paths:
       - in: "path"
         name: "user_id"
         type: "number"
-        description: "ユーザー番号"
+        description: "ユーザーID"
         required: true
       responses:
         "200":
@@ -212,7 +212,7 @@ paths:
       - in: "path"
         name: "store_id"
         type: "number"
-        description: "店舗番号"
+        description: "店舗ID"
         required: true
       responses:
         "200":
