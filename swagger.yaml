@@ -35,11 +35,6 @@ paths:
         type: "string"
         description: "メールアドレス"
         required: true
-      - in: "query"
-        name: "password"
-        type: "string"
-        description: "パスワード"
-        required: true
       responses:
         "200":
           description: "ユーザー情報取得完了"
@@ -133,7 +128,7 @@ paths:
                   - id: "2" 
                     user_id: "1"
                     store_id: "2"
-                    is_favorite: "2021-05-13 05:30:30"
+                    is_favorite: 
                     created_at: "2021-05-12T11:08:00.000000Z"
                     updated_at: "2021-05-12T11:08:00.000000Z"
         "404":
