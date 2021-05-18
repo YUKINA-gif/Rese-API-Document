@@ -159,7 +159,7 @@ paths:
         required: true
       responses:
         "200":
-          description: "ユーザー予約情報取得完了"
+          description: "ユーザー予約店舗取得完了"
           schema:
             type: "object"
             properties:
@@ -538,7 +538,7 @@ paths:
             properties:
               message:
                 type: "string"
-                example: "Favorite deleted successfully"
+                example: "Booking deleted successfully"
         "404":
           description: "予約データがありません"
           schema:
