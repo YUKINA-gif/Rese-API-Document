@@ -16,6 +16,10 @@ tags:
   description: "お気に入りに関する操作"
 - name: "Booking"
   description: "予約に関する操作"
+- name: "StoreManager"
+  description: "店舗代表者に関する操作"
+- name: "Manager"
+  description: "管理者に関する操作"
 
 paths:
   /user:
@@ -46,10 +50,10 @@ paths:
                 example: "User got successfully"
               user:
                 example:
-                  - id: "1"
+                    id: "1"
                     name: "山田　太郎"
-                    created_at: "2021-05-16T09:38:11.000000Z"
-                    updated_at: "2021-05-16T09:38:11.000000Z"
+                    created_at: "2021-06-19T08:22:08.000000Z"
+                    updated_at: "2021-06-19T08:22:08.000000Z"
         "404":
           description: "ユーザー情報がありません"
           schema:
@@ -58,6 +62,7 @@ paths:
               message:
                 type: "string"
                 example: "Not found"
+                
     post:
       tags:
       - "Users"
@@ -122,15 +127,37 @@ paths:
                   - id: "1" 
                     user_id: "1"
                     store_id: "1"
-                    is_favorite: 
-                    created_at: "2021-05-11T11:12:30.000000Z"
-                    updated_at: "2021-05-11T11:12:30.000000Z"
+                    is_favorite: null
+                    store:
+                      id: "1"
+                      area_id: "1"
+                      genre_id: "1"
+                      name: "仙人"
+                      overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
+                      image: "sushi.jpg"
+                      area: 
+                        id: "1"
+                        area: "東京"
+                      genre: 
+                        id: "1"
+                        genre: "寿司"
                   - id: "2" 
                     user_id: "1"
                     store_id: "2"
-                    is_favorite: 
-                    created_at: "2021-05-12T11:08:00.000000Z"
-                    updated_at: "2021-05-12T11:08:00.000000Z"
+                    is_favorite: null
+                    store:
+                      id: "2"
+                      area_id: "2"
+                      genre_id: "2"
+                      name: "牛助"
+                      overview: "焼肉業界で20年間経験を積み、肉を熟知したマスターによる実力派焼肉店。長年の実績とお付き合いをもとに、なかなか食べられない希少部位も仕入れております。また、ゆったりとくつろげる空間はお仕事終わりの一杯や女子会にぴったりです。"
+                      image: "yakiniku.jpg"
+                      area: 
+                        id: "2"
+                        area: "大阪"
+                      genre: 
+                        id: "2"
+                        genre: "焼肉"
         "404":
           description: "お気に入り店舗がありません"
           schema:
@@ -168,19 +195,32 @@ paths:
                   - id: "1" 
                     user_id: "1"
                     store_id: "1"
-                    booking_date: "2021-05-20"
+                    is_booking: null
+                    booking_date: "2021年05月20日"
                     booking_time: "18:00:00"
                     booking_number: "2" 
-                    created_at: "2021-05-11T11:12:30.000000Z"
-                    updated_at: "2021-05-11T11:12:30.000000Z"
+                    created_at: "2021-06-18T05:35:11.000000Z"
+                    updated_at: "2021-06-18T08:44:59.000000Z"
+                    store:
+                      id: "1"
+                      area_id: "1"
+                      genre_id: "1"
+                      name: "仙人"
+                      overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
+                      image: "sushi.jpg"
                   - id: "2" 
                     user_id: "1"
                     store_id: "2"
-                    booking_date: "2021-05-25"
+                    booking_date: "2021年05月25日"
                     booking_time: "20:00:00"
                     booking_number: "4" 
-                    created_at: "2021-05-12T11:08:00.000000Z"
-                    updated_at: "2021-05-12T11:08:00.000000Z"
+                    store:
+                      id: "2"
+                      area_id: "2"
+                      genre_id: "2"
+                      name: "牛助"
+                      overview: "焼肉業界で20年間経験を積み、肉を熟知したマスターによる実力派焼肉店。長年の実績とお付き合いをもとに、なかなか食べられない希少部位も仕入れております。また、ゆったりとくつろげる空間はお仕事終わりの一杯や女子会にぴったりです。"
+                      image: "yakiniku.jpg"
         "404":
           description: "予約店舗がありません"
           schema:
@@ -190,18 +230,23 @@ paths:
                 type: "string"
                 example: "Not found"
 
-  /stores:
+  /stores/{user_id}:
     get:
       tags:
       - "Stores"
       summary: "店舗一覧データ表示"
-      description: "店舗の一覧を表示します"
+      description: "店舗の一覧,ユーザーお気に入り情報,エリア,ジャンルを表示します"
       operationId: "getStores"
       consumes:
       - "application/json"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - in: "path"
+        name: "user_id"
+        type: "number"
+        description: "ユーザーID"
+        required: true
       responses:
         "200":
           description: "店舗全データを取得し表示する"
@@ -213,17 +258,35 @@ paths:
                 genre_id: "1"
                 name: "仙人"
                 overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
-                image: "https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/sushi.jpg"
-                created_at: "2021-05-12T11:08:00.000000Z"
-                updated_at: "2021-05-12T11:08:00.000000Z"
+                image: "sushi.jpg"
+                area: 
+                  id: "1"
+                  area: "東京"
+                genre: 
+                  id: "1"
+                  genre: "寿司"
+                favorites:
+                  id: "4"
+                  store_id: "1"
+                  user_id: "4"
+                  is_favorite: null
               - id: "2"
                 area_id: "2"
                 genre_id: "2"
                 name: "牛助"
                 overview: "焼肉業界で20年間経験を積み、肉を熟知したマスターによる実力派焼肉店。長年の実績とお付き合いをもとに、なかなか食べられない希少部位も仕入れております。また、ゆったりとくつろげる空間はお仕事終わりの一杯や女子会にぴったりです。"
-                image: "https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg"
-                created_at: "2021-05-12T11:08:00.000000Z"
-                updated_at: "2021-05-12T11:08:00.000000Z"
+                image: "yakiniku.jpg"
+                area: 
+                  id: "2"
+                  area: "大阪"
+                genre: 
+                  id: "2"
+                  genre: "焼肉"
+                favorites:
+                  id: "5"
+                  store_id: "2"
+                  user_id: "4"
+                  is_favorite: null
         "404":
           description: "店舗データがありません"
           schema:
@@ -233,7 +296,7 @@ paths:
                 type: "string"
                 example: "Not found"
 
-  /stores/{id}:
+  /store/{id}:
     get:
       tags:
       - "Stores"
@@ -263,9 +326,13 @@ paths:
                   genre_id: "1"
                   name: "仙人"
                   overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
-                  image: "https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/sushi.jpg"
-                  created_at: "2021-05-12T11:08:00.000000Z"
-                  updated_at: "2021-05-12T11:08:00.000000Z"
+                  image: "sushi.jpg"
+                  area: 
+                    id: "1"
+                    area: "東京"
+                  genre: 
+                    id: "1"
+                    genre: "寿司"
         "404":
           description: "店舗データがありません"
           schema:
@@ -274,6 +341,198 @@ paths:
               message:
                 type: "string"
                 example: "Not found"
+
+  /storesSearch/{user_id}:
+    get:
+      tags:
+      - "Stores"
+      summary: "店舗検索"
+      description: "指定した店舗データを検索し、表示します"
+      operationId: "SearchStore"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "user_id"
+        type: "number"
+        description: "ユーザーID"
+        required: true
+      - in: "query"
+        name: "area_id"
+        type: "number"
+        description: "エリアID"
+      - in: "query"
+        name: "genre_id"
+        type: "number"
+        description: "ジャンルID"
+      - in: "query"
+        name: "name"
+        type: "string"
+        description: "名前"
+      responses:
+        "200":
+          description: "検索データ取得"
+          schema:
+            properties:
+              message:
+                type: "object"
+                example: "OK"
+              store:
+                example:
+                  id: "1"
+                  area_id: "1"
+                  genre_id: "1"
+                  name: "仙人"
+                  overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
+                  image: "sushi.jpg"
+                  area: 
+                    id: "1"
+                    area: "東京"
+                  genre: 
+                    id: "1"
+                    genre: "寿司"
+        "404":
+          description: "検索データがありません"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Not found"
+
+  /storeImageUpdate:
+      post:
+        tags:
+        - "Stores"
+        summary: "店舗画像更新"
+        description: "店舗画像の更新をします"
+        operationId: "StoreImangeUpdate"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "number"
+                example: "1"
+              image:
+                type: "string"
+                example: "image.jpg"
+        responses:
+          "200":
+            description: "画像更新完了"
+            schema:
+              type: "object"
+              properties:
+                message:
+                  type: "object"
+                  example: "Store image updated successfully"
+          "404":
+            description: "データがありません"
+            schema:
+              type: "object"
+              properties:
+                message:
+                  type: "string"
+                  example: "Not found"
+  
+  /stores:
+      put:
+        tags:
+        - "Stores"
+        summary: "店舗情報更新"
+        description: "店舗情報の更新をします"
+        operationId: "StoreUpdate"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "number"
+                example: "1"
+              name:
+                type: "string"
+                example: "一楽"
+              overview:
+                type: "string"
+                example: "数日かけて煮込んだ豚骨スープが自慢のお店です。"
+              image:
+                type: "string"
+                example: "image.jpg"
+              area_id:
+                type: "number"
+                example: "2"
+              genre_id:
+                type: "number"
+                example: "5"
+        responses:
+          "200":
+            description: "画像更新完了"
+            schema:
+              type: "object"
+              properties:
+                message:
+                  type: "object"
+                  example: "Store updated successfully"
+          "404":
+            description: "店舗データがありません"
+            schema:
+              type: "object"
+              properties:
+                message:
+                  type: "string"
+                  example: "Not found"
+
+      delete:
+        tags:
+        - "Stores"
+        summary: "店舗削除"
+        description: "店舗を削除する"
+        operationId: "StoreDelete"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+                example: "1"
+        responses:
+          "200":
+            description: "店舗削除完了"
+            schema:
+              properties:
+                message:
+                  type: "string"
+                  example: "Store deleted successfully"
+          "404":
+            description: "予約データがありません"
+            schema:
+              type: "object"
+              properties:
+                message:
+                  type: "string"
+                  example: "Not found"
+
   /login:
     post:
       tags:
@@ -337,8 +596,8 @@ paths:
     post:
       tags:
       - "Favorite"
-      summary: "お気に入り店舗登録"
-      description: "お気に入り店舗を登録をします"
+      summary: "お気に入り店舗登録,復元,削除"
+      description: "お気に入り店舗の登録,復元,削除をします"
       operationId: "createFavorite"
       consumes:
       - "application/json"
@@ -358,76 +617,74 @@ paths:
               type: "string"
               example: "1"
       responses:
-        "200":
+        "200(create)":
           description: "お気に入り登録完了"
           schema:
             properties:
               message:
                 type: "string"
                 example: "Favorite created successfully"
-    put:
-      tags:
-      - "Favorite"
-      summary: "お気に入り再登録"
-      description: "お気に入り解除した店舗を再登録する"
-      operationId: "updateFavorite"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "object"
-          properties:
-            store_id:
-              type: "string"
-              example: "1"
-            user_id:
-              type: "string"
-              example: "1"
-      responses:
-        "200":
-          description: "お気に入り再登録完了"
+        "200(restore)":
+          description: "お気に入り削除されていれば再登録"
           schema:
             properties:
               message:
                 type: "string"
                 example: "Favorite restored successfully"
-    delete:
-      tags:
-      - "Favorite"
-      summary: "お気に入り削除"
-      description: "お気に入り登録した店舗を削除する"
-      operationId: "deleteFavorite"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          type: "object"
-          properties:
-            store_id:
-              type: "string"
-              example: "1"
-            user_id:
-              type: "string"
-              example: "1"
-      responses:
-        "200":
-          description: "お気に入り削除完了"
+        "200(delete)":
+          description: "すでに登録していればお気に入り削除"
           schema:
             properties:
               message:
                 type: "string"
                 example: "Favorite deleted successfully"
   /booking:
+    get:
+      tags:
+      - "Booking"
+      summary: "予約全データ取得"
+      description: "予約全データ取得"
+      operationId: "Booking"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "店舗全データを取得し表示する"
+          schema:
+            example:
+              booking:
+              - id: "1"
+                store_id: "1"
+                user_id: "1"
+                is_booking: null
+                booking_date: "2021-06-30"
+                booking_time: "20:00:00"
+                booking_nomber: "2"
+                created_at: "2021-06-19T08:23:08.000000Z"
+                updated_at: "2021-06-19T08:23:08.000000Z"
+                store:
+                  id: "1"
+                  area_id: "1"
+                  genre_id: "1"
+                  name: "仙人"
+                  overview: "料理長厳選の食材から作る寿司を用いたコースをぜひお楽しみください。食材・味・価格、お客様の満足度を徹底的に追及したお店です。特別な日のお食事、ビジネス接待まで気軽に使用することができます。"
+                  image: "sushi.jpg"
+                user:
+                  id: "1"
+                  name: "山田太郎"
+                  created_at: "2021-06-19T08:22:08.000000Z"
+                  updated_at: "2021-06-19T08:22:08.000000Z"
+        "404":
+          description: "データがありません"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Not found"
     post:
       tags:
       - "Booking"
@@ -547,3 +804,154 @@ paths:
               message:
                 type: "string"
                 example: "Not found"
+
+  /manage/create:
+    post:
+      tags:
+      - "Manager"
+      summary: "店舗代表者権限発行"
+      description: "店舗代表者権限を発行します"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      operationId: "ManagerCreate"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            login_id:
+              type: "string"
+              example: "01"
+      responses:
+        "200":
+          description: "パスワード発行完了"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+                example: "Manager created successfully"
+              login_id: 
+                example: "01"
+              password: 
+                example: "RGKEvIFd"
+
+  /manage/login:
+    post:
+      tags:
+      - "Manager"
+      summary: "店舗代表者ログイン"
+      description: "店舗代表者用ページからログインします"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      operationId: "ManagerLogin"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            login_id:
+              type: "string"
+              example: "01"
+            password:
+              type: "string"
+              example: "RGKEvIFd"
+      responses:
+          "200":
+            description: "ログイン完了"
+            schema:
+              properties:
+                auth:
+                  type: "boolean"
+                  example: true
+          "404":
+            description: "ログインできませんでした"
+            schema:
+              properties:
+                auth:
+                  type: "boolean"
+                  example: false
+                
+  /manage/storeManager/create:
+    post:
+      tags:
+      - "StoreManager"
+      summary: "管理者権限発行"
+      description: "管理者権限を発行します"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      operationId: "ManagerCreate"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            login_id:
+              type: "string"
+              example: "01"
+      responses:
+        "200":
+          description: "パスワード発行完了"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+                example: "Manager created successfully"
+              login_id: 
+                example: "01"
+              password: 
+                example: "RGKEvIFd"
+
+  /manage/storeManager/login:
+    post:
+      tags:
+      - "StoreManager"
+      summary: "店舗代表者ログイン"
+      description: "店舗代表者用ページからログインします"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      operationId: "ManagerLogin"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            login_id:
+              type: "string"
+              example: "01"
+            password:
+              type: "string"
+              example: "RGKEvIFd"
+      responses:
+          "200":
+            description: "ログイン完了"
+            schema:
+              properties:
+                auth:
+                  type: "boolean"
+                  example: true
+          "404":
+            description: "ログインできませんでした"
+            schema:
+              properties:
+                auth:
+                  type: "boolean"
+                  example: false
+        
