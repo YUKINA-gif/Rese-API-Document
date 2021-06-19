@@ -809,8 +809,8 @@ paths:
     post:
       tags:
       - "Manager"
-      summary: "店舗代表者権限発行"
-      description: "店舗代表者権限を発行します"
+      summary: "管理者権限発行"
+      description: "管理者権限を発行します"
       consumes:
       - "application/json"
       produces:
@@ -844,8 +844,8 @@ paths:
     post:
       tags:
       - "Manager"
-      summary: "店舗代表者ログイン"
-      description: "店舗代表者用ページからログインします"
+      summary: "管理者ログイン"
+      description: "管理者用ページからログインします"
       consumes:
       - "application/json"
       produces:
@@ -884,8 +884,8 @@ paths:
     post:
       tags:
       - "StoreManager"
-      summary: "管理者権限発行"
-      description: "管理者権限を発行します"
+      summary: "店舗代表者権限発行"
+      description: "店舗代表者権限を発行します"
       consumes:
       - "application/json"
       produces:
